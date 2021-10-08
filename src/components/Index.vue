@@ -28,5 +28,9 @@
       -26px -26px 52px #ffffff;
   }
 
-  .drag-wrapper {}
+  .drag-wrapper {
+    width: 90%;
+    height: 200px;
+    border: 3px dotted #cccccc;
+  }
 </style>

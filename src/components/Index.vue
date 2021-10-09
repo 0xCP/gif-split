@@ -2,18 +2,24 @@
   <div class='title'>在线GIF图片帧拆分工具</div>
   <div class=main>
     <div class='drag-wrapper' id='leftContain'>
-      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%; z-index: 9;">
-      <p class="tips"  v-on:drag="onDrag" v-on:dragover="onDrop">将GIF图像拖入此处或点击上传</p>
+      <input type="file" @change='uploadImg($event)' ref='img'
+        style="opacity: 0; width: 100%; height: 100%; z-index: 9;">
+      <p class="tips" v-on:drag="onDrag" v-on:dragover="onDrop">将GIF图像拖入此处或点击上传</p>
     </div>
     <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
-      <div v-for="item in imgList" :key="item">
-    <img :src="item.dataURL" />
-      </div>
+    <div class='button' @click="download">下载</div>
+    <div v-for="item in imgList" :key="item">
+      <img :src="item.dataURL" />
+    </div>
   </div>
 </template>
 <script>
   import SuperGif from 'libgif';
+  import JSZip from 'jszip';
+  import {
+    saveAs
+  } from 'file-saver';
 
   export default {
     name: 'Index',
@@ -26,18 +32,10 @@
       onDrag(e) {
         e.stopPropagation()
         e.preventDefault()
-        console.log(44444)
       },
       onDrop(e) {
         e.stopPropagation()
         e.preventDefault()
-        console.log(e.dataTransfer.files)
-        console.log(e.dataTransfer.files[0])
-        console.log(1231231231223123)
-        // let files = e.dataTransfer.files
-        // if (files.length) {
-        //   this.uploadImg(files[0])
-        // }
       },
       uploadImg() {
         let imgfile = this.$refs.img.files[0];
@@ -69,11 +67,11 @@
             let canvas = rub.get_canvas()
             let dataURL = canvas.toDataURL('image/png')
             // 将每一帧的canvas转换成file对象
-            // let cur_file = this.convertCanvasToImage(rub.get_canvas(), gif_source.name.replace('.gif', '') + `-${i}`)
+            let cur_file = this.convertCanvasToImage(rub.get_canvas(), `${i}.png`)
             // console.log(frame_list[i])
             let item = {
               dataURL: dataURL,
-              // file: cur_file,
+              file: cur_file,
             }
             this.imgList.push(item)
           }
@@ -90,21 +88,36 @@
           // this.img_list = img_list
         });
       },
+      download() {
+        console.log(123123123123)
+        let zip = new JSZip();
+        this.imgList.forEach(item => {
+          zip.file(item.file.name, item.file);
+        })
+        zip.generateAsync({
+            type: "blob"
+          })
+          .then(function (content) {
+            saveAs(content, "example.zip");
+          });
+      },
       // 将canvas转换成file对象
-    convertCanvasToImage(canvas, filename) {
-    return this.dataURLtoFile(canvas.toDataURL('image/png'), filename);
-},
-dataURLtoFile(dataurl, filename) {
-    const arr = dataurl.split(',');
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    var n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, {type:mime});
-},
+      convertCanvasToImage(canvas, filename) {
+        return this.dataURLtoFile(canvas.toDataURL('image/png'), filename);
+      },
+      dataURLtoFile(dataurl, filename) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        var n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {
+          type: mime
+        });
+      },
     }
   }
 </script>

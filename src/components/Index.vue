@@ -4,8 +4,6 @@
     <div class='drag-wrapper'>
       <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
     </div>
-    <!-- <img v-if='imgSrc' :src='imgSrc' id='img1' key="" style='width: 100%; height: 100%'/> -->
-    <!-- <img src="./1.gif" alt="" ref='img1' id='img1' style="height: 100px;"> -->
     <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
       <div v-for="item in imgList" :key="item">

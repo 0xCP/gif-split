@@ -4,9 +4,9 @@
     <div class='drag-wrapper'>
       <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
     </div>
-    <img src="./1.gif" alt="" ref='img1' id='img1' style="height: 100px;">
-
-    <div class='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
+    <!-- <img v-if='imgSrc' :src='imgSrc' id='img1' key="" style='width: 100%; height: 100%'/> -->
+    <!-- <img src="./1.gif" alt="" ref='img1' id='img1' style="height: 100px;"> -->
+    <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
       <div v-for="item in imgList" :key="item">
     <img :src="item" />
@@ -41,7 +41,18 @@
         let file = imgfile.files[0];
         console.log(e)
         console.log(file)
-        this.pre_load_gif(file)
+        this.imgSrc = window.URL.createObjectURL(file);
+        // setTimeout(() => {
+        //   this.pre_load_gif()
+        // }, 1500)
+        // this.pre_load_gif(this.imgSrc)
+        let newDiv = document.createElement('img')
+        newDiv.src = this.imgSrc
+        newDiv.id = 'img1'
+        let a = document.getElementById('desc')
+        a.appendChild(newDiv)
+        this.pre_load_gif(newDiv)
+
       },
       test() {
         let a = document.getElementById('img1')
@@ -49,6 +60,7 @@
       },
       pre_load_gif(gif_source) {
         console.log(111)
+        // let gif_source = document.getElementById('img1');
         // 新建gif实例
         var rub = new SuperGif({
           gif: gif_source,

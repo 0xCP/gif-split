@@ -8,7 +8,7 @@
     <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
       <div v-for="item in imgList" :key="item">
-    <img :src="item" />
+    <img :src="item.dataURL" />
       </div>
   </div>
 </template>
@@ -71,7 +71,11 @@
             // 将每一帧的canvas转换成file对象
             // let cur_file = this.convertCanvasToImage(rub.get_canvas(), gif_source.name.replace('.gif', '') + `-${i}`)
             // console.log(frame_list[i])
-            this.imgList.push(dataURL)
+            let item = {
+              dataURL: dataURL,
+              // file: cur_file,
+            }
+            this.imgList.push(item)
           }
 
 

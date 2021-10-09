@@ -2,6 +2,8 @@
   <div class='title'>在线GIF图片帧拆分工具</div>
   <div class=main>
     <div class='drag-wrapper'>111111</div>
+    <div class='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
+    <div class='button'>举个例子</div>
   </div>
 </template>
 <script>
@@ -29,8 +31,28 @@
   }
 
   .drag-wrapper {
+    margin: 50px 0 0 0;
     width: 90%;
     height: 200px;
     border: 3px dotted #cccccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .desc {
+    margin: 20px 0 0 0;
+  }
+
+  .button {
+    margin: 20px 0 20px 0;
+    background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 30px;
   }
 </style>

@@ -5,6 +5,7 @@
       <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
     </div>
     <img src="./1.gif" alt="" ref='img1' id='img1' style="height: 100px;">
+
     <div class='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
       <div v-for="item in imgList" :key="item">
@@ -47,14 +48,12 @@
         this.pre_load_gif(a)
       },
       pre_load_gif(gif_source) {
-        // const gifImg = document.createElement('img');
-        // // gif库需要img标签配置下面两个属性
-        // gifImg.setAttribute('rel:animated_src', URL.createObjectURL(gif_source))
-        // gifImg.setAttribute('rel:auto_play', '0')
+        console.log(111)
         // 新建gif实例
         var rub = new SuperGif({
           gif: gif_source,
         });
+        console.log(rub.get_length())
         rub.load(() => {
           // let frame_list = rub.get_frames()
           for (let i = 0; i < rub.get_length(); i++) {

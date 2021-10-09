@@ -1,8 +1,9 @@
 <template>
   <div class='title'>在线GIF图片帧拆分工具</div>
   <div class=main>
-    <div class='drag-wrapper'>
-      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
+    <div class='drag-wrapper' id='leftContain'>
+      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 1; width: 100%; height: 100%">
+      <p>将GIF图像拖入此处或点击上传</p>
     </div>
     <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
@@ -22,28 +23,25 @@
       }
     },
     methods: {
-      onDrag(e) {
-        e.stopPropagation()
-        e.preventDefault()
-      },
-      onDrop(e) {
-        e.stopPropagation()
-        e.preventDefault()
-        let files = e.dataTransfer.files
-        if (files.length) {
-          this.uploadImg(files[0])
-        }
-      },
-      uploadImg(e) {
-        let imgfile = this.$refs.img;
-        let file = imgfile.files[0];
-        console.log(e)
-        console.log(file)
-        this.imgSrc = window.URL.createObjectURL(file);
-        // setTimeout(() => {
-        //   this.pre_load_gif()
-        // }, 1500)
-        // this.pre_load_gif(this.imgSrc)
+      // onDrag(e) {
+      //   e.stopPropagation()
+      //   e.preventDefault()
+      //   console.log(44444)
+      // },
+      // onDrop(e) {
+      //   e.stopPropagation()
+      //   e.preventDefault()
+      //   console.log(e.dataTransfer.files)
+      //   console.log(e.dataTransfer.files[0])
+      //   console.log(1231231231223123)
+      //   // let files = e.dataTransfer.files
+      //   // if (files.length) {
+      //   //   this.uploadImg(files[0])
+      //   // }
+      // },
+      uploadImg() {
+        let imgfile = this.$refs.img.files[0];
+        this.imgSrc = window.URL.createObjectURL(imgfile);
         let newDiv = document.createElement('img')
         newDiv.src = this.imgSrc
         newDiv.id = 'img1'
@@ -134,6 +132,7 @@ dataURLtoFile(dataurl, filename) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-image: url('<svg xmlns="http://www.w3.org/2000/svg"><text>文字内容</text></svg>');
   }
 
   .desc {

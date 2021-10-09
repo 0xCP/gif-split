@@ -4,23 +4,34 @@
     <div class='drag-wrapper'>
       <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
     </div>
+    <img src="./1.gif" alt="" ref='img1' id='img1' style="height: 100px;">
     <div class='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
-    <div class='button'>举个例子</div>
+    <div class='button' @click="test">举个例子</div>
+      <div v-for="item in imgList" :key="item">
+    <img :src="item" />
+      </div>
   </div>
 </template>
 <script>
+  import SuperGif from 'libgif';
+
   export default {
     name: 'Index',
+    data() {
+      return {
+        imgList: [],
+      }
+    },
     methods: {
-      onDrag (e){
+      onDrag(e) {
         e.stopPropagation()
         e.preventDefault()
       },
-      onDrop (e){
+      onDrop(e) {
         e.stopPropagation()
         e.preventDefault()
         let files = e.dataTransfer.files
-        if(files.length){
+        if (files.length) {
           this.uploadImg(files[0])
         }
       },
@@ -29,7 +40,60 @@
         let file = imgfile.files[0];
         console.log(e)
         console.log(file)
-      }
+        this.pre_load_gif(file)
+      },
+      test() {
+        let a = document.getElementById('img1')
+        this.pre_load_gif(a)
+      },
+      pre_load_gif(gif_source) {
+        // const gifImg = document.createElement('img');
+        // // gif库需要img标签配置下面两个属性
+        // gifImg.setAttribute('rel:animated_src', URL.createObjectURL(gif_source))
+        // gifImg.setAttribute('rel:auto_play', '0')
+        // 新建gif实例
+        var rub = new SuperGif({
+          gif: gif_source,
+        });
+        rub.load(() => {
+          // let frame_list = rub.get_frames()
+          for (let i = 0; i < rub.get_length(); i++) {
+            rub.move_to(i)
+            let canvas = rub.get_canvas()
+            let dataURL = canvas.toDataURL('image/png')
+            // 将每一帧的canvas转换成file对象
+            // let cur_file = this.convertCanvasToImage(rub.get_canvas(), gif_source.name.replace('.gif', '') + `-${i}`)
+            // console.log(frame_list[i])
+            this.imgList.push(dataURL)
+          }
+
+
+          //   let cur_file = this.convertCanvasToImage(rub.get_canvas(), gif_source.name.replace('.gif', '') +
+          //     `-${i}`)
+          //   img_list.push({
+          //     file_name: cur_file.name,
+          //     url: URL.createObjectURL(cur_file),
+          //     file: cur_file,
+          //   })
+          // }
+          // this.img_list = img_list
+        });
+      },
+      // 将canvas转换成file对象
+    convertCanvasToImage(canvas, filename) {
+    return this.dataURLtoFile(canvas.toDataURL('image/png'), filename);
+},
+dataURLtoFile(dataurl, filename) {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    var n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+},
     }
   }
 </script>

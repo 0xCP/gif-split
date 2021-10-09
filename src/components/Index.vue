@@ -2,8 +2,8 @@
   <div class='title'>在线GIF图片帧拆分工具</div>
   <div class=main>
     <div class='drag-wrapper' id='leftContain'>
-      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 1; width: 100%; height: 100%">
-      <p>将GIF图像拖入此处或点击上传</p>
+      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%; z-index: 9;">
+      <p class="tips"  v-on:drag="onDrag" v-on:dragover="onDrop">将GIF图像拖入此处或点击上传</p>
     </div>
     <div class='desc' id='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button' @click="test">举个例子</div>
@@ -23,22 +23,22 @@
       }
     },
     methods: {
-      // onDrag(e) {
-      //   e.stopPropagation()
-      //   e.preventDefault()
-      //   console.log(44444)
-      // },
-      // onDrop(e) {
-      //   e.stopPropagation()
-      //   e.preventDefault()
-      //   console.log(e.dataTransfer.files)
-      //   console.log(e.dataTransfer.files[0])
-      //   console.log(1231231231223123)
-      //   // let files = e.dataTransfer.files
-      //   // if (files.length) {
-      //   //   this.uploadImg(files[0])
-      //   // }
-      // },
+      onDrag(e) {
+        e.stopPropagation()
+        e.preventDefault()
+        console.log(44444)
+      },
+      onDrop(e) {
+        e.stopPropagation()
+        e.preventDefault()
+        console.log(e.dataTransfer.files)
+        console.log(e.dataTransfer.files[0])
+        console.log(1231231231223123)
+        // let files = e.dataTransfer.files
+        // if (files.length) {
+        //   this.uploadImg(files[0])
+        // }
+      },
       uploadImg() {
         let imgfile = this.$refs.img.files[0];
         this.imgSrc = window.URL.createObjectURL(imgfile);
@@ -133,6 +133,11 @@ dataURLtoFile(dataurl, filename) {
     justify-content: center;
     align-items: center;
     background-image: url('<svg xmlns="http://www.w3.org/2000/svg"><text>文字内容</text></svg>');
+  }
+
+  .tips {
+    position: absolute;
+    z-index: 0;
   }
 
   .desc {

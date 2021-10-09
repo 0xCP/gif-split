@@ -1,7 +1,9 @@
 <template>
   <div class='title'>在线GIF图片帧拆分工具</div>
   <div class=main>
-    <div class='drag-wrapper'>111111</div>
+    <div class='drag-wrapper'>
+      <input type="file" @change='uploadImg($event)' ref='img' style="opacity: 0; width: 100%; height: 100%">
+    </div>
     <div class='desc'>选择GIF图像后工具将自动将GIF图像拆分成每一帧静态图片</div>
     <div class='button'>举个例子</div>
   </div>
@@ -9,6 +11,26 @@
 <script>
   export default {
     name: 'Index',
+    methods: {
+      onDrag (e){
+        e.stopPropagation()
+        e.preventDefault()
+      },
+      onDrop (e){
+        e.stopPropagation()
+        e.preventDefault()
+        let files = e.dataTransfer.files
+        if(files.length){
+          this.uploadImg(files[0])
+        }
+      },
+      uploadImg(e) {
+        let imgfile = this.$refs.img;
+        let file = imgfile.files[0];
+        console.log(e)
+        console.log(file)
+      }
+    }
   }
 </script>
 <style scoped>
